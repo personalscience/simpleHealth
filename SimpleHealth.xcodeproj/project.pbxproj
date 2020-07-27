@@ -22,6 +22,7 @@
 		FEBD1D5224CF3D10002CEF08 /* SHHRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBD1D5124CF3D0F002CEF08 /* SHHRView.swift */; };
 		FEBD1D5424CF40B4002CEF08 /* HealthKitSetupAssistant.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBD1D5324CF40B4002CEF08 /* HealthKitSetupAssistant.swift */; };
 		FEBD1D5624CF4110002CEF08 /* UserHealthProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBD1D5524CF4110002CEF08 /* UserHealthProfile.swift */; };
+		FEBD1D5B24CF574F002CEF08 /* ProfileDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBD1D5A24CF574F002CEF08 /* ProfileDataStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		FEBD1D5124CF3D0F002CEF08 /* SHHRView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHHRView.swift; sourceTree = "<group>"; };
 		FEBD1D5324CF40B4002CEF08 /* HealthKitSetupAssistant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitSetupAssistant.swift; sourceTree = "<group>"; };
 		FEBD1D5524CF4110002CEF08 /* UserHealthProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserHealthProfile.swift; sourceTree = "<group>"; };
+		FEBD1D5A24CF574F002CEF08 /* ProfileDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileDataStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				FEBD1D4B24CF363B002CEF08 /* SimpleHealth.entitlements */,
 				FEBD1D1424CF2ECA002CEF08 /* AppDelegate.swift */,
 				FEBD1D5324CF40B4002CEF08 /* HealthKitSetupAssistant.swift */,
+				FEBD1D5A24CF574F002CEF08 /* ProfileDataStore.swift */,
 				FEBD1D1624CF2ECA002CEF08 /* SceneDelegate.swift */,
 				FEBD1D1B24CF2ECA002CEF08 /* ContentView.swift */,
 				FEBD1D5724CF4119002CEF08 /* Models */,
@@ -308,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FEBD1D1A24CF2ECA002CEF08 /* SimpleHealth.xcdatamodeld in Sources */,
+				FEBD1D5B24CF574F002CEF08 /* ProfileDataStore.swift in Sources */,
 				FEBD1D5424CF40B4002CEF08 /* HealthKitSetupAssistant.swift in Sources */,
 				FEBD1D5624CF4110002CEF08 /* UserHealthProfile.swift in Sources */,
 				FEBD1D1524CF2ECA002CEF08 /* AppDelegate.swift in Sources */,
