@@ -59,6 +59,72 @@ class ProfileDataStore {
       return (age, unwrappedBiologicalSex, unwrappedBloodType)
     }
   }
+    
+    class func getMostRecentSample(for sampleType: HKSampleType,
+                                   completion: @escaping (HKQuantitySample?, Error?) -> Swift.Void) {
+      
+    //1. Use HKQuery to load the most recent samples.
+    let mostRecentPredicate = HKQuery.predicateForSamples(withStart: Date.distantPast,
+                                                          end: Date(),
+                                                          options: .strictEndDate)
+        
+    let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
+                                          ascending: false)
+        
+    let limit = 1
+        
+    let sampleQuery = HKSampleQuery(sampleType: sampleType,
+                                    predicate: mostRecentPredicate,
+                                    limit: limit,
+                                    sortDescriptors: [sortDescriptor]) { (query, samples, error) in
+        
+        //2. Always dispatch to the main thread when complete.
+        DispatchQueue.main.async {
+            
+          guard let samples = samples,
+                let mostRecentSample = samples.first as? HKQuantitySample else {
+                    
+                completion(nil, error)
+                return
+          }
+            
+          completion(mostRecentSample, nil)
+        }
+      }
+     
+    HKHealthStore().execute(sampleQuery)
+    }
+    
+    class func getHeight() -> Double {
+        //1. Use HealthKit to create the Height Sample Type
+        guard let heightSampleType = HKSampleType.quantityType(forIdentifier: .height) else {
+          print("Height Sample Type is no longer available in HealthKit")
+            return 0.1
+        }
+        self.getMostRecentSample(for: heightSampleType) { (sample, error) in
+            
+        guard let sample = sample else {
+            
+          if let error = error {
+            print("error: no height available")
+          }
+              
+          return
+            }
+            
+        
+            
+        //2. Convert the height sample to meters, save to the profile model,
+        //   and update the user interface.
+        let heightInMeters = sample.quantity.doubleValue(for: HKUnit.meter())
+        
+        
+        }
+        return 0.2
+    }
+
 
 }
+
+
 

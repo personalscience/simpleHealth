@@ -19,8 +19,12 @@ struct SHHRView: View {
                     .fill(Color(.blue))
                     .frame(width:300, height:400)
                 .padding()
-                Text("Heart Rate = " + String(self.getAge()))
+                VStack{
+                    Text("Heart Rate = \(self.getAge())")
+                        .foregroundColor(.white)
+                    Text("Height = \(self.getHeight())")
                     .foregroundColor(.white)
+                }
                 
             }
             }
@@ -42,6 +46,12 @@ struct SHHRView: View {
 
         
         return userHealthProfile.age ?? 0
+    }
+    
+    private func getHeight() -> Double {
+       let userHealthProfile = UserHealthProfile()
+        return userHealthProfile.heightInMeters ?? 0.0
+
     }
 
 }

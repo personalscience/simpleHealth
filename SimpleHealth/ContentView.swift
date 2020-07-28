@@ -19,7 +19,6 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selection){
             SHHRView()
-                .font(.title)
                 .tabItem {
                     VStack {
                         Image("first")
