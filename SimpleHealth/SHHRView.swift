@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct SHHRView: View {
-    
+    var userHealthData = UserHealthData(message: "SHHRView")
   
     var body: some View {
         VStack{
@@ -20,7 +20,9 @@ struct SHHRView: View {
                     .frame(width:300, height:400)
                 .padding()
                 VStack{
-                    Text("Heart Rate = \(self.getAge())")
+//                    Text("Heart Rate = \(self.getHR())")
+//                        .foregroundColor(.white)
+                    Text("Age = " + String(userHealthData.age?.description ?? "err"))
                         .foregroundColor(.white)
                     Text("Height = \(self.getHeight())")
                     .foregroundColor(.white)
@@ -50,7 +52,7 @@ struct SHHRView: View {
     
     private func getHeight() -> Double {
        let userHealthProfile = UserHealthProfile()
-        return userHealthProfile.heightInMeters ?? 0.0
+        return userHealthProfile.heightInMeters ?? 0.5
 
     }
 
@@ -60,5 +62,6 @@ struct SHHRView: View {
 struct SHHRView_Previews: PreviewProvider {
     static var previews: some View {
         SHHRView()
+        .environmentObject(UserHealthData(message: "Preview"))
     }
 }

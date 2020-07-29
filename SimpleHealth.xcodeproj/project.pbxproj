@@ -23,6 +23,7 @@
 		FEBD1D5424CF40B4002CEF08 /* HealthKitSetupAssistant.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBD1D5324CF40B4002CEF08 /* HealthKitSetupAssistant.swift */; };
 		FEBD1D5624CF4110002CEF08 /* UserHealthProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBD1D5524CF4110002CEF08 /* UserHealthProfile.swift */; };
 		FEBD1D5B24CF574F002CEF08 /* ProfileDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBD1D5A24CF574F002CEF08 /* ProfileDataStore.swift */; };
+		FEDBB78224D0E77D00C66462 /* SHUserHealthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEDBB78124D0E77D00C66462 /* SHUserHealthData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		FEBD1D5324CF40B4002CEF08 /* HealthKitSetupAssistant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitSetupAssistant.swift; sourceTree = "<group>"; };
 		FEBD1D5524CF4110002CEF08 /* UserHealthProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserHealthProfile.swift; sourceTree = "<group>"; };
 		FEBD1D5A24CF574F002CEF08 /* ProfileDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileDataStore.swift; sourceTree = "<group>"; };
+		FEDBB78124D0E77D00C66462 /* SHUserHealthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHUserHealthData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				FEBD1D5524CF4110002CEF08 /* UserHealthProfile.swift */,
+				FEDBB78124D0E77D00C66462 /* SHUserHealthData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 				FEBD1D1524CF2ECA002CEF08 /* AppDelegate.swift in Sources */,
 				FEBD1D1C24CF2ECA002CEF08 /* ContentView.swift in Sources */,
 				FEBD1D5224CF3D10002CEF08 /* SHHRView.swift in Sources */,
+				FEDBB78224D0E77D00C66462 /* SHUserHealthData.swift in Sources */,
 				FEBD1D1724CF2ECA002CEF08 /* SceneDelegate.swift in Sources */,
 				FEBD1D4A24CF3440002CEF08 /* SHSettingsView.swift in Sources */,
 				FEBD1D5024CF36CB002CEF08 /* SHResultsView.swift in Sources */,

@@ -31,100 +31,171 @@
 import HealthKit
 
 class ProfileDataStore {
-  class func getAgeSexAndBloodType() throws -> (age: Int,
-                                                biologicalSex: HKBiologicalSex,
-                                                bloodType: HKBloodType) {
-      
-    let healthKitStore = HKHealthStore()
-      
-    do {
-
-      //1. This method throws an error if these data are not available.
-      let birthdayComponents =  try healthKitStore.dateOfBirthComponents()
-      let biologicalSex =       try healthKitStore.biologicalSex()
-      let bloodType =           try healthKitStore.bloodType()
-        
-      //2. Use Calendar to calculate age.
-      let today = Date()
-      let calendar = Calendar.current
-      let todayDateComponents = calendar.dateComponents([.year],
-                                                          from: today)
-      let thisYear = todayDateComponents.year!
-      let age = thisYear - birthdayComponents.year!
-       
-      //3. Unwrap the wrappers to get the underlying enum values.
-      let unwrappedBiologicalSex = biologicalSex.biologicalSex
-      let unwrappedBloodType = bloodType.bloodType
-        
-      return (age, unwrappedBiologicalSex, unwrappedBloodType)
+    
+    private var healthKitStore = HKHealthStore()    
+    class func getAgeSexAndBloodType() throws -> (age: Int,
+        biologicalSex: HKBiologicalSex,
+        bloodType: HKBloodType) {
+            
+            let healthKitStore = HKHealthStore()
+            
+            
+            do {
+                
+                //1. This method throws an error if these data are not available.
+                let birthdayComponents =  try healthKitStore.dateOfBirthComponents()
+                let biologicalSex =       try healthKitStore.biologicalSex()
+                let bloodType =           try healthKitStore.bloodType()
+                
+                //2. Use Calendar to calculate age.
+                let today = Date()
+                let calendar = Calendar.current
+                let todayDateComponents = calendar.dateComponents([.year],
+                                                                  from: today)
+                let thisYear = todayDateComponents.year!
+                let age = thisYear - birthdayComponents.year!
+                
+                //3. Unwrap the wrappers to get the underlying enum values.
+                let unwrappedBiologicalSex = biologicalSex.biologicalSex
+                let unwrappedBloodType = bloodType.bloodType
+                
+                return (age, unwrappedBiologicalSex, unwrappedBloodType)
+            }
     }
-  }
     
     class func getMostRecentSample(for sampleType: HKSampleType,
                                    completion: @escaping (HKQuantitySample?, Error?) -> Swift.Void) {
-      
-    //1. Use HKQuery to load the most recent samples.
-    let mostRecentPredicate = HKQuery.predicateForSamples(withStart: Date.distantPast,
-                                                          end: Date(),
-                                                          options: .strictEndDate)
         
-    let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
-                                          ascending: false)
+        //1. Use HKQuery to load the most recent samples.
+        let mostRecentPredicate = HKQuery.predicateForSamples(withStart: Date.distantPast,
+                                                              end: Date(),
+                                                              options: .strictEndDate)
         
-    let limit = 1
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
+                                              ascending: false)
         
-    let sampleQuery = HKSampleQuery(sampleType: sampleType,
-                                    predicate: mostRecentPredicate,
-                                    limit: limit,
-                                    sortDescriptors: [sortDescriptor]) { (query, samples, error) in
+        let limit = 1
         
-        //2. Always dispatch to the main thread when complete.
-        DispatchQueue.main.async {
-            
-          guard let samples = samples,
-                let mostRecentSample = samples.first as? HKQuantitySample else {
-                    
-                completion(nil, error)
-                return
-          }
-            
-          completion(mostRecentSample, nil)
+        let sampleQuery = HKSampleQuery(sampleType: sampleType,
+                                        predicate: mostRecentPredicate,
+                                        limit: limit,
+                                        sortDescriptors: [sortDescriptor]) { (query, samples, error) in
+                                            
+                                            //2. Always dispatch to the main thread when complete.
+                                            DispatchQueue.main.async {
+                                                
+                                                guard let samples = samples,
+                                                    let mostRecentSample = samples.first as? HKQuantitySample else {
+                                                        
+                                                        completion(nil, error)
+                                                        return
+                                                }
+                                                
+                                                completion(mostRecentSample, nil)
+                                            }
         }
-      }
-     
-    HKHealthStore().execute(sampleQuery)
+        
+        HKHealthStore().execute(sampleQuery)
     }
     
     class func getHeight() -> Double {
         //1. Use HealthKit to create the Height Sample Type
         guard let heightSampleType = HKSampleType.quantityType(forIdentifier: .height) else {
-          print("Height Sample Type is no longer available in HealthKit")
+            print("Height Sample Type is no longer available in HealthKit")
             return 0.1
         }
         self.getMostRecentSample(for: heightSampleType) { (sample, error) in
             
-        guard let sample = sample else {
-            
-          if let error = error {
-            print("error: no height available")
-          }
-              
-          return
+            guard let sample = sample else {
+                
+                if let error = error {
+                    print("error: no height available")
+                }
+                
+                return
             }
             
-        
             
-        //2. Convert the height sample to meters, save to the profile model,
-        //   and update the user interface.
-        let heightInMeters = sample.quantity.doubleValue(for: HKUnit.meter())
-        
-        
+            
+            //2. Convert the height sample to meters, save to the profile model,
+            //   and update the user interface.
+            let heightInMeters = sample.quantity.doubleValue(for: HKUnit.meter())
+            
+            
         }
         return 0.2
     }
-
-
+    
+    func start() {
+        authorizeHealthKit()
+        startHeartRateQuery(quantityTypeIdentifier: .heartRate)
+    }
+    
+    func authorizeHealthKit() {
+        
+        
+        
+        let healthKitTypes: Set = [
+            HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!]
+        
+        self.healthKitStore.requestAuthorization(toShare: healthKitTypes, read: healthKitTypes) { _, _ in }
+    }
+    
+    private func startHeartRateQuery(quantityTypeIdentifier: HKQuantityTypeIdentifier) {
+        
+        // 1
+        let devicePredicate = HKQuery.predicateForObjects(from: [HKDevice.local()])
+        // 2
+        let updateHandler: (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void = {
+            query, samples, deletedObjects, queryAnchor, error in
+            
+            // 3
+            guard let samples = samples as? [HKQuantitySample] else {
+                return
+            }
+            
+            self.process(samples, type: quantityTypeIdentifier)
+            
+        }
+        
+        // 4
+        let query = HKAnchoredObjectQuery(type: HKObjectType.quantityType(forIdentifier: quantityTypeIdentifier)!, predicate: devicePredicate, anchor: nil, limit: HKObjectQueryNoLimit, resultsHandler: updateHandler)
+        
+        query.updateHandler = updateHandler
+        
+        // 5
+        
+        self.healthKitStore.execute(query)
+    }
+    
+    private func process(_ samples: [HKQuantitySample], type: HKQuantityTypeIdentifier) {
+        //         var lastHeartRate = 0.0
+        //
+        //         for sample in samples {
+        //             if type == .heartRate {
+        //                 lastHeartRate = sample.quantity.doubleValue(for: heartRateQuantity)
+        //             }
+        //
+        //             self.value = Int(lastHeartRate)
+    }
+    
+    
+    
+    func getHR() -> Int{
+        
+        var lastHeartRate = 0.0
+        
+        //        for sample in samples {
+        //            if type == .heartRate {
+        //                lastHeartRate = sample.quantity.doubleValue(for: heartRateQuantity)
+        //            }
+        //
+        //            self.value = Int(lastHeartRate)
+        //        }
+        
+        return 50
+    }
+    
+    
 }
-
-
 
